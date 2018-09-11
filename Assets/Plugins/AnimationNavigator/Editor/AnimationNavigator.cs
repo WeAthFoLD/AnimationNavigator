@@ -18,7 +18,7 @@ class Navigator {
     [MenuItem("Window/Animation Navigator %#k")]
     public static void OpenNavigator() {
         var target = ReflectionInterface.inst.GetEditTarget();
-        if (target.animator == null) {
+        if (!target.animator) {
             Debug.Log("Animation Navigator: No editing animation target.");
         }
 
