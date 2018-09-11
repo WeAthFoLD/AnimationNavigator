@@ -20,6 +20,7 @@ class Navigator {
         var target = ReflectionInterface.inst.GetEditTarget();
         if (!target.animator) {
             Debug.Log("Animation Navigator: No editing animation target.");
+            return;
         }
 
         var animator = target.animator;
