@@ -29,7 +29,6 @@ class Navigator {
         var window = EditorWindow.CreateInstance<AutoCompleteWindow>();
 
         window.Setup(names, str => {
-            Debug.Log("Select " + str);
             var clip = clips.Where(it => it.name == str).First();
             ReflectionInterface.inst.ChangeSelection(clip);
         });
