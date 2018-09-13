@@ -46,12 +46,12 @@ class Navigator {
 
 }
 
-class AnimationSelection {
+public class AnimationSelection {
     public Animator animator;
     public AnimationClip clip;
 }
 
-class ReflectionInterface {
+public class ReflectionInterface {
     public static readonly ReflectionInterface inst = new ReflectionInterface();
 
     private ReflectionInterface() {
