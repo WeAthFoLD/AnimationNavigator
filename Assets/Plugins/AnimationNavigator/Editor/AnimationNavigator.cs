@@ -36,6 +36,7 @@ class Navigator {
 
         var animationWindow = ReflectionInterface.inst.GetFirstAnimationWindow();
         window.ShowUtility();
+        window.Focus();
 
         window.titleContent = new GUIContent("Animation Nav");
         var pos = animationWindow.position;
@@ -43,7 +44,6 @@ class Navigator {
         pos.width = 200;
         pos.center = animationWindow.position.center;
         window.position = pos;
-        window.EnforceWindowSize();
     }
 
 }
@@ -115,7 +115,7 @@ internal class ReflectionInterface {
 
 }
 
-public class AutoCompleteWindow : EditorWindow {
+internal class AutoCompleteWindow : EditorWindow {
 
     public List<string> options { get; private set; }
     public SearchField searchField { get; private set; }
@@ -123,6 +123,8 @@ public class AutoCompleteWindow : EditorWindow {
     AutoCompleteTreeView treeView;
 
     Action<string> onFinishInput;
+    
+    bool _shouldClose;
 
     public void Setup(List<string> _options, Action<string> _finishInput) {
         options = _options;
@@ -135,7 +137,19 @@ public class AutoCompleteWindow : EditorWindow {
         treeView.SetFocus();
     }
 
+    void OnEnable() {
+        Selection.selectionChanged += Close;
+    }
+
+    void OnDisable() {
+        Selection.selectionChanged -= Close;
+    }
+
     void OnGUI() {
+        if (_shouldClose || treeView == null) { // When code recompiles treeview will become null
+            Close();
+            return;
+        }
         treeView.SetFocus();
 
         var evt = Event.current;
@@ -163,15 +177,6 @@ public class AutoCompleteWindow : EditorWindow {
         treeView.OnGUI(GUILayoutUtility.GetRect(0, 10000, 0, 10000));
     }
 
-    public void EnforceWindowSize() {
-        return;
-        // Enforce window size
-        var pos = position;
-        pos.width = 200;
-        pos.height = 300;
-        position = pos;
-    }
-
     public void ConfirmInput(int id) {
         onFinishInput(options[id]);
         Close();
@@ -179,6 +184,10 @@ public class AutoCompleteWindow : EditorWindow {
 
     public void CancelInput() {
         Close();
+    }
+
+    void OnLostFocus() {
+        _shouldClose = true;
     }
 
 }
