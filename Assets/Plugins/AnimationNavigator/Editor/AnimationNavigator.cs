@@ -13,10 +13,8 @@ namespace AnimationNavigator {
 
 class Navigator {
 
-    static Rect popupRect;
-
-    [MenuItem("Window/Animation Navigator %#k")]
-    public static void OpenNavigator() {
+    [MenuItem("Window/Animation/Navigator %#k")]
+    static void OpenNavigator() {
         var target = ReflectionInterface.inst.GetEditTarget();
         if (!target.animator) {
             Debug.Log("Animation Navigator: No editing animation target.");
@@ -48,12 +46,12 @@ class Navigator {
 
 }
 
-internal class AnimationSelection {
+class AnimationSelection {
     public Animator animator;
     public AnimationClip clip;
 }
 
-internal class ReflectionInterface {
+class ReflectionInterface {
     public static readonly ReflectionInterface inst = new ReflectionInterface();
 
     private ReflectionInterface() {
@@ -115,7 +113,7 @@ internal class ReflectionInterface {
 
 }
 
-internal class AutoCompleteWindow : EditorWindow {
+class AutoCompleteWindow : EditorWindow {
 
     public List<string> options { get; private set; }
     public SearchField searchField { get; private set; }
@@ -162,7 +160,7 @@ internal class AutoCompleteWindow : EditorWindow {
             }
 
             char ch = evt.character;
-            if (Char.IsLetterOrDigit(ch) || ch == '_') {
+            if (!Char.IsControl(ch)) {
                 evt.Use();
                 treeView.searchString += ch;
 
